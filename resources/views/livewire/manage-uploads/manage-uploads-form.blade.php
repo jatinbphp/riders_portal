@@ -9,7 +9,7 @@
             <div class="col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">{{($uplaodId) ? 'Edit' : 'Add' }} {{$menu}}</h3>
+                        <h3 class="card-title">Add {{$menu}}</h3>
                     </div>
                     <form wire:submit.prevent="manageUploads">
                         <div class="card-body">
@@ -21,17 +21,30 @@
                                         @error('title') <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>File: <span class="text-danger">*</span></label><br>
-                                        <input type="file" wire:model="file" id="file" class="form-control" accept="image/*,video/*">
-                                        @error('file') <span class="text-danger">{{ $message }}</span> @enderror
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>File: <span class="text-danger">*</span></label><br>
+                                            <input type="file" wire:model="file" id="file" class="form-control" accept="image/*,video/*">
+                                            @error('file') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            @if ($file)
+                                                @if (strpos($file->getMimeType(), 'image') !== false)
+                                                    <img src="{{ $file->temporaryUrl() }}" class="mt-2 img-thumbnail" width="50" height="25">
+                                                @elseif (strpos($file->getMimeType(), 'video') !== false)
+                                                    <video controls class="mt-2  w-50 h-50">
+                                                        <source src="{{ $file->temporaryUrl() }}" type="{{ $file->getMimeType() }}">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                @endif
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <a href="{{ route('clubs') }}" wire:navigate><button class="btn btn-default" type="button">Back</button></a>
-                                <button type="submit" class="btn btn-primary">{{($uplaodId) ? 'Update' : 'Add' }}</button>
+                                <button type="submit" class="btn btn-primary">Add</button>
                             </div>
                         </div>
                     </form>

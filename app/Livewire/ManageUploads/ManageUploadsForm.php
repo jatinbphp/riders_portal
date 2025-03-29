@@ -10,7 +10,6 @@ use App\Models\Uploads;
 class ManageUploadsForm extends Component
 {
     use WithFileUploads;
-    public $uplaodId;
     public $title, $file;
     public $menu;
     public $breadcrumb;
@@ -38,14 +37,6 @@ class ManageUploadsForm extends Component
         ];
         $this->activeMenu = 'Add';
         $this->allType = Uploads::uploadType;
-        if($id){
-            $this->activeMenu = 'Edit';
-            $club = Clubs::findOrFail($id);
-            $this->clubId = $club->id;
-            $this->name = $club->name;
-            $this->description = $club->description;
-            $this->status = $club->status;
-        }
     }
 
     public function manageUploads()
