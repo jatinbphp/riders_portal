@@ -10,9 +10,10 @@ use App\Livewire\Dashboard;
 use App\Livewire\ManageClubs;
 use App\Livewire\ManageClubs\ManageClubForm;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/', Login::class);
 
 Route::get('/register', Register::class)->name('register');
 Route::get('/login', Login::class)->name('login');

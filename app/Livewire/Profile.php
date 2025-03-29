@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Auth;
 
 class Profile extends Component
 {
+    public $user;
     public function render() {
-        return view('livewire.profile', ['user' => Auth::user()])->layout('layouts.app');
+        $this->user = Auth::user();
+        return view('livewire.profile')->extends('layouts.app');
     }
 }

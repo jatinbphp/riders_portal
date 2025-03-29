@@ -5,3 +5,4 @@
 
     <button wire:click="logout" class="w-full bg-red-500 text-white p-2 mt-4 rounded">Logout</button>
 </div>
+
