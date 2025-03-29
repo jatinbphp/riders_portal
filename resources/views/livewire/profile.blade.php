@@ -11,7 +11,8 @@
                     <div class="card-header">
                         <h3 class="card-title">Edit {{$menu}}</h3>
                     </div>
-                    <form wire:submit.prevent="saveProfile">
+                    <form wire:submit.prevent="updateProfile">
+                        @csrf
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">

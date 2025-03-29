@@ -30,7 +30,7 @@
                                         <div class="form-group">
                                             @if ($file)
                                                 @if (strpos($file->getMimeType(), 'image') !== false)
-                                                    <img src="{{ $file->temporaryUrl() }}" class="mt-2 img-thumbnail" width="50" height="25">
+                                                    <img src="{{ $file->temporaryUrl() }}" class="mt-2 img-thumbnail" width="150" height="150">
                                                 @elseif (strpos($file->getMimeType(), 'video') !== false)
                                                     <video controls class="mt-2  w-50 h-50">
                                                         <source src="{{ $file->temporaryUrl() }}" type="{{ $file->getMimeType() }}">

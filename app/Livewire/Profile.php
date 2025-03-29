@@ -49,8 +49,9 @@ class Profile extends Component
         return view('livewire.profile')->extends('layouts.app');
     }
 
-    public function saveProfile()
-    {
+    public function updateProfile()
+    {     
+
         $this->validate([
             'firstname' => 'required|string',
             'lastname' => 'required|string',
@@ -59,7 +60,7 @@ class Profile extends Component
             'password_confirmation' => 'nullable|min:6',           
             'height' => 'nullable|numeric',
             'weight' => 'nullable|numeric',
-            'sport_type' => 'required|string',
+            'sport_type' => 'required|string', 
             'specialization' => 'nullable|string',
             // 'about' => 'nullable|string',
             'club_id' => 'nullable|exists:clubs,id',
