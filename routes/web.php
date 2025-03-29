@@ -9,11 +9,12 @@ use App\Livewire\Profile;
 use App\Livewire\Dashboard;
 use App\Livewire\ManageClubs;
 use App\Livewire\ManageClubs\ManageClubForm;
+use App\Livewire\ManageUploads;
+use App\Livewire\ManageUploads\ManageUploadsForm;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-Route::get('/', Login::class);
+Route::get('/', function () {
+    return redirect()->route('dashboard');
+});
 
 Route::get('/register', Register::class)->name('register');
 Route::get('/login', Login::class)->name('login');
@@ -29,6 +30,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/manage-clubs-data', [ManageClubs::class, 'getClubData'])->name('clubs.data');
     Route::get('/clubs/create', ManageClubForm::class)->name('clubs.create');
     Route::get('/clubs/{id}/edit', ManageClubForm::class)->name('clubs.edit');
+
+    Route::get('/manage-uploads', ManageUploads::class)->name('uploads');
+    Route::get('/manage-uploads-data', [ManageUploads::class, 'getUploadsData'])->name('uploads.data');
+    Route::get('/uploads/create', ManageUploadsForm::class)->name('uploads.create');
+    Route::get('/uploads/{id}/edit', ManageUploadsForm::class)->name('uploads.edit');
 
 });
 

@@ -16,21 +16,21 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Name:</label>
+                                        <label>Name: <span class="text-danger">*</span></label>
                                         <input type="text" placeholder="Please Enter Club Name" wire:model="name" class="form-control">
                                         @error('name') <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Description:</label>
+                                        <label>Description: <span class="text-danger">*</span></label>
                                         <input type="text" placeholder="Please Enter Club Description" wire:model="description" class="form-control">
                                         @error('description') <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Status:</label>
+                                        <label>Status: <span class="text-danger">*</span></label>
                                         <div class="onoffswitch4" wire:ignore>
                                             <input type="checkbox" {{($status) ? 'checked' : ''}} name="onoffswitch4" class="onoffswitch4-checkbox" id="myonoffswitch4" wire:model="status">
                                             <label class="onoffswitch4-label" for="myonoffswitch4">

@@ -18,6 +18,12 @@
                         <p>Clubs</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('uploads') }}" class="nav-link {{ request()->is('manage-uploads') ? 'active' : '' }}" wire:navigate>
+                        <i class="nav-icon fa fa-upload"></i>
+                        <p>Uploads</p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
