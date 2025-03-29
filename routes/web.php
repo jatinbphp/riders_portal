@@ -16,18 +16,20 @@ Route::get('/', function () {
 
 Route::get('/register', Register::class)->name('register');
 Route::get('/login', Login::class)->name('login');
-Route::get('/profile', Profile::class)->middleware('auth')->name('profile');
 Route::get('/logout', Logout::class)->name('logout');
 
-/* Manage Dashboard Start */
-Route::get('/dashboard', Dashboard::class)->name('dashboard');
-/* Manage Dashboard End */
+// Protected Routes (Requires Authentication)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/profile', Profile::class)->name('profile');
 
-Route::get('/manage-clubs', ManageClubs::class)->name('clubs');
-Route::get('/manage-clubs-data', [ManageClubs::class, 'getClubData'])->name('clubs.data');
-Route::get('/clubs/create', ManageClubForm::class)->name('clubs.create');
-Route::get('/clubs/{id}/edit', ManageClubForm::class)->name('clubs.edit');
 
+    Route::get('/manage-clubs', ManageClubs::class)->name('clubs');
+    Route::get('/manage-clubs-data', [ManageClubs::class, 'getClubData'])->name('clubs.data');
+    Route::get('/clubs/create', ManageClubForm::class)->name('clubs.create');
+    Route::get('/clubs/{id}/edit', ManageClubForm::class)->name('clubs.edit');
+
+});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
