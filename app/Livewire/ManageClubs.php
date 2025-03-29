@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\Clubs;
+use Yajra\DataTables\Facades\DataTables;
 
 class ManageClubs extends Component
 {
@@ -10,7 +12,7 @@ class ManageClubs extends Component
     public $breadcrumb;
     public $activeMenu;
 
-    protected $listeners = ['deleteBCompany'];
+    protected $listeners = ['deleteClub'];
 
     public function render()
     {
@@ -22,13 +24,13 @@ class ManageClubs extends Component
         return view('livewire.manage-clubs')->extends('layouts.app');
     }
 
-    public function getBCompanysData()
+    public function getClubData()
     {
-        return DataTables::of(BCompanyModel::select())
+        return DataTables::of(Clubs::select())
             ->addColumn('actions', function ($row) {
-                return view('livewire.b-company.actions', ['company' => $row, 'type' => 'action']);
+                return view('livewire.manage-clubs.actions', ['club' => $row, 'type' => 'action']);
             })->addColumn('status', function ($row) {
-                return view('livewire.b-company.actions', ['company' => $row, 'type' => 'status']);
+                return view('livewire.manage-clubs.actions', ['club' => $row, 'type' => 'status']);
             })
             ->rawColumns(['actions', 'status'])
             ->make(true);
@@ -37,19 +39,19 @@ class ManageClubs extends Component
     public function updateStatus($id)
     {
         if($id){
-            $company = BCompanyModel::findOrFail($id);
-            $company->status = !$company->status;
-            $company->save();
+            $club = Clubs::findOrFail($id);
+            $club->status = !$club->status;
+            $club->save();
         }
     }
 
-    public function deleteBCompany($companyId)
+    public function deleteClub($clubId)
     {
-        $company = BCompanyModel::find($companyId);
+        $club = Clubs::find($clubId);
         
-        if ($company) {
-            $company->delete();
-            $this->dispatch('bCompanyDeleted');
+        if ($club) {
+            $club->delete();
+            $this->dispatch('clubDeleted');
         }
     }
 }

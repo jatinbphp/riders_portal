@@ -23,12 +23,12 @@
 
                     <input type="hidden" id="route_name" value="{{ route('clubs.data') }}">
                     <div class="card-body table-responsive" wire:ignore>
-                        <table id="b-Company" class="table table-bordered table-striped datatable-dynamic">
+                        <table id="club" class="table table-bordered table-striped datatable-dynamic">
                             <thead>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="37%">B Company Name</th>
-                                    <th width="40%">Address</th>
+                                    <th width="37%">Name</th>
+                                    <th width="40%">Description</th>
                                     <th width="10%">Status</th>
                                     <th width="8%">Action</th>
                                 </tr>
@@ -46,7 +46,7 @@
     <script>
         $(document).ready(function () {
             $(document).on('click', '.delete-btn', function () {
-                let companyId = $(this).data('id');
+                let clubId = $(this).data('id');
                 Swal.fire({
                     title: "Are you sure?",
                     text: "You won't be able to revert this!",
@@ -57,7 +57,7 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Livewire.dispatch('deleteBCompany', { companyId: companyId });
+                        Livewire.dispatch('deleteClub', { clubId: clubId });
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                         Swal.fire({
                             title: "Cancelled",
@@ -70,8 +70,8 @@
             });
 
             // Refresh DataTable when a company is deleted
-            Livewire.on('bCompanyDeleted', function () {
-                $('#b-Company').DataTable().ajax.reload(null, false);
+            Livewire.on('clubDeleted', function () {
+                $('#club').DataTable().ajax.reload(null, false);
             });
         });
     </script>

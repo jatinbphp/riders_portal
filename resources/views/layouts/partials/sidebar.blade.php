@@ -13,9 +13,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('clubs') }}" class="nav-link {{ request()->is('clubs') ? 'active' : '' }}" wire:navigate>
+                    <a href="{{ route('clubs') }}" class="nav-link {{ request()->is('manage-clubs') ? 'active' : '' }}" wire:navigate>
                         <i class="nav-icon fa fa-clipboard"></i>
-                        <p>clubs</p>
+                        <p>Clubs</p>
                     </a>
                 </li>
             </ul>

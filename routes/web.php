@@ -15,7 +15,7 @@ Route::get('/dashboard', Dashboard::class)->name('dashboard');
 /* Manage Dashboard End */
 
 Route::get('/manage-clubs', ManageClubs::class)->name('clubs');
-Route::get('/manage-clubs-data', [ManageClubs::class, 'getLCompanysData'])->name('clubs.data');
+Route::get('/manage-clubs-data', [ManageClubs::class, 'getClubData'])->name('clubs.data');
 Route::get('/clubs/create', ManageClubForm::class)->name('clubs.create');
 Route::get('/clubs/{id}/edit', ManageClubForm::class)->name('clubs.edit');
 
