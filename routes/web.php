@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Auth\Register;
+use App\Livewire\Auth\Login;
+use App\Livewire\Logout;
+use App\Livewire\Profile;
 use App\Livewire\Dashboard;
 use App\Livewire\ManageClubs;
 use App\Livewire\ManageClubs\ManageClubForm;
@@ -9,6 +13,11 @@ use App\Livewire\ManageClubs\ManageClubForm;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/register', Register::class)->name('register');
+Route::get('/login', Login::class)->name('login');
+Route::get('/profile', Profile::class)->middleware('auth')->name('profile');
+Route::get('/logout', Logout::class)->name('logout');
 
 /* Manage Dashboard Start */
 Route::get('/dashboard', Dashboard::class)->name('dashboard');
