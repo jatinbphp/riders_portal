@@ -16,18 +16,89 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Name:</label>
-                                        <input type="text" placeholder="Please Enter Club Name" wire:model="name" class="form-control">
-                                        @error('name') <span class="text-danger">{{ $message }}</span> @enderror
+                                        <label>First Name:</label>
+                                        <input type="text" placeholder="First Name" wire:model="firstname" class="form-control">
+                                        @error('firstname') <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
+
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Description:</label>
-                                        <input type="text" placeholder="Please Enter Club Description" wire:model="description" class="form-control">
-                                        @error('description') <span class="text-danger">{{ $message }}</span> @enderror
+                                        <label>Last Name:</label>
+                                        <input type="text" placeholder="Last Name" wire:model="lastname" class="form-control">
+                                        @error('lastname') <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email:</label>
+                                        <input type="text" placeholder="Email" wire:model="email" class="form-control">
+                                        @error('email') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Password:</label>
+                                        <input type="password" placeholder="Enter Password" wire:model="password" class="form-control">
+                                        @error('password') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Confirm Password:</label>
+                                        <input type="password" placeholder="Confirm Password" wire:model="password_confirmation" class="form-control">
+                                        @error('password_confirmation') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Height (cm):</label>
+                                        <input type="number" placeholder="Enter Height" wire:model="height" class="form-control">
+                                        @error('height') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Weight (kg):</label>
+                                        <input type="number" placeholder="Enter Weight" wire:model="weight" class="form-control">
+                                        @error('weight') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Sport Type:</label>
+                                        <input type="text" placeholder="Enter Sport Type" wire:model="sport_type" class="form-control">
+                                        @error('sport_type') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Club:</label>
+                                        <select name="club_id" class="form-control">
+                                            <option value="">Select Club</option>
+                                            @foreach ($clubs as $club)
+                                                <option value="{{ $club->id }}">{{ $club->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Specialization:</label>
+                                        <input type="text" placeholder="Enter Specialization" wire:model="specialization" class="form-control">
+                                        @error('specialization') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
+
+                             
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Status:</label>

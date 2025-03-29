@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('weight')->nullable();
             $table->string('sport_type')->nullable();
             $table->string('specialization')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image')->nullable();            
+            $table->integer('club_id')->nullable();
             $table->string('status')->default('active');
             $table->rememberToken();
             $table->timestamps();
@@ -43,6 +44,18 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        // Insert a default user
+        DB::table('users')->insert([
+            'firstname' => 'Super Admin',
+            'lastname' => 'Super Admin',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('123456'),
+            'status' => 'active',
+            'role' => 'super_admin',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     /**

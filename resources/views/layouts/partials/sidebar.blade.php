@@ -6,10 +6,17 @@
     <div class="sidebar">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+               
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" wire:navigate>
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('profile') }}" class="nav-link {{ request()->is('profile') ? 'active' : '' }}" wire:navigate>
+                        <i class="nav-icon fas fa-file"></i>
+                        <p>Profile Management</p>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -18,6 +25,18 @@
                         <p>Clubs</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('social-links') }}" class="nav-link {{ request()->is('social-links') ? 'active' : '' }}" wire:navigate>
+                        <i class="nav-icon fa fa-clipboard"></i>
+                        <p>Social Links</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('logout') }}" class="nav-link" wire:click="logout">
+                        <i class="nav-icon fa fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>                
             </ul>
         </nav>
     </div>

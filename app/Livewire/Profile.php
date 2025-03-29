@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class Profile extends Component
 {
     public $user;
-    public $sport_type, $specialization, $height, $weight, $about, $club_id, $profile_picture, $status;
+    public $userId, $firstname, $lastname, $email, $password, $password_confirmation;
+    public $sport_type, $specialization, $height, $weight, $about, $club_id, $image, $status;
     public $clubs;
     public $menu;
     public $breadcrumb;
@@ -22,18 +23,24 @@ class Profile extends Component
         $this->breadcrumb = [['route' => 'profile', 'title' => 'Profile']];
         $this->activeMenu = 'Edit';
 
+        $this->clubs = Clubs::where('status', 1)->get(['id', 'name']);
+
         $profile = Auth::user();
 
         if ($profile) {
+            $this->userId = $profile->id;
+            $this->firstname = $profile->firstname;
+            $this->lastname = $profile->lastname;
+            $this->email = $profile->email;
             $this->sport_type = $profile->sport_type;
             $this->specialization = $profile->specialization;
             $this->height = $profile->height;
             $this->weight = $profile->weight;
-            $this->about = $profile->about;
+            // $this->about = $profile->about;
             $this->club_id = $profile->club_id;
+            $this->status = $profile->status;
         }
 
-        $this->clubs = Clubs::all();
     }
 
     public function render()
@@ -45,30 +52,48 @@ class Profile extends Component
     public function saveProfile()
     {
         $this->validate([
-            'sport_type' => 'required|string',
-            'specialization' => 'nullable|string',
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $this->userId, 
+            'password' => 'nullable|min:6|confirmed', 
+            'password_confirmation' => 'nullable|min:6',           
             'height' => 'nullable|numeric',
             'weight' => 'nullable|numeric',
-            'about' => 'nullable|string',
+            'sport_type' => 'required|string',
+            'specialization' => 'nullable|string',
+            // 'about' => 'nullable|string',
             'club_id' => 'nullable|exists:clubs,id',
-            'profile_picture' => 'nullable|image|max:1024', // 1MB max
+            // 'image' => 'nullable|image|max:1024', // 1MB max
+            'status' => 'boolean'
         ]);
 
         $profile = Auth::user();
         $profile->update([
-            'sport_type' => $this->sport_type,
-            'specialization' => $this->specialization,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'email' => $this->email,          
             'height' => $this->height,
             'weight' => $this->weight,
-            'about' => $this->about,
+            'sport_type' => $this->sport_type,
+            'specialization' => $this->specialization,
+            // 'about' => $this->about,
             'club_id' => $this->club_id,
+            'status' => $this->status ?? false, // Default to false if null
         ]);
 
-        if ($this->profile_picture) {
-            $path = $this->profile_picture->store('profile_pictures', 'public');
-            $profile->update(['profile_picture' => $path]);
+
+        // Update password if provided
+        if ($this->password) {
+            $profile->update(['password' => Hash::make($this->password)]);
+        }
+
+        if ($this->image) {
+            $path = $this->image->store('images', 'public');
+            $profile->update(['image' => $path]);
         }
 
         session()->flash('success', 'Profile updated successfully!');
+
+        $this->redirect(route('dashboard'), navigate: true);
     }
 }
