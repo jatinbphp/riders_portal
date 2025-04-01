@@ -53,8 +53,8 @@ class ManageSocialLinks extends Component
     }
 
     public function getLinksData()
-    {
-        return DataTables::of(SocialLinks::where('user_id', Auth::id()))
+    { 
+         return DataTables::of(SocialLinks::select())
             ->addColumn('actions', function ($row) {
                 return view('livewire.manage-social-links.actions', ['links' => $row, 'type' => 'action']);
             })->addColumn('status', function ($row) {
@@ -63,12 +63,11 @@ class ManageSocialLinks extends Component
             ->rawColumns(['actions', 'status'])
             ->make(true);
     }
-
-    public function updateStatus($id)
+ 
+     public function updateStatus($id)
     {
-        $links = SocialLinks::where('id', $id)->where('user_id', Auth::id())->first();
-
-        if ($links) {
+        if($id){
+            $links = SocialLinks::findOrFail($id);
             $links->status = !$links->status;
             $links->save();
         }

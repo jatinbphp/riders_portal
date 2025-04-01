@@ -44,7 +44,7 @@
 </div>
 @section('js')
     <script>
-        $(document).ready(function () {
+        $(document).ready(function () { 
             $(document).on('click', '.delete-btn', function () {
                 let clubId = $(this).data('id');
                 Swal.fire({
@@ -75,5 +75,4 @@
             });
         });
     </script>
-@endsection
-
+@endsection 

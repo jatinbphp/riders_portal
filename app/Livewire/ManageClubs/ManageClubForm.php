@@ -48,6 +48,7 @@ class ManageClubForm extends Component
             'name' => $this->name,
             'description' => $this->description,
             'status' => $this->status,
+            'user_id' => auth()->id(),
         ];
 
         if($this->clubId){
