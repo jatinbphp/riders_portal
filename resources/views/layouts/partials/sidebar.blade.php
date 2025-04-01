@@ -38,6 +38,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('document.uploads') }}" class="nav-link {{ request()->is('document-uploads') ? 'active' : '' }}" wire:navigate>
+                        <i class="nav-icon fa fa-upload"></i>
+                        <p>Document Uploads</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('logout') }}" class="nav-link" wire:click="logout">
                         <i class="nav-icon fa fa-sign-out-alt"></i>
                         <p>Logout</p>

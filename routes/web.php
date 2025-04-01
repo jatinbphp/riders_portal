@@ -13,6 +13,8 @@ use App\Livewire\ManageClubs\ManageClubForm;
 use App\Livewire\ManageSocialLinks\ManageSocialLinksForm;
 use App\Livewire\ManageUploads;
 use App\Livewire\ManageUploads\ManageUploadsForm;
+use App\Livewire\DocumentUploads; 
+use App\Livewire\DocumentUploads\DocumentUploadsForm; 
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -46,6 +48,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/manage-uploads-data', [ManageUploads::class, 'getUploadsData'])->name('uploads.data');
     Route::get('/uploads/create', ManageUploadsForm::class)->name('uploads.create');
     Route::get('/uploads/{id}/edit', ManageUploadsForm::class)->name('uploads.edit');
+
+    Route::get('/document-uploads', DocumentUploads::class)->name('document.uploads'); 
+    Route::get('/document-uploads/create', DocumentUploadsForm::class)->name('document-uploads.create');
 
 
 });
