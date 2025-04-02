@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Clubs;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class ManageClubs extends Component
 {
@@ -13,6 +14,19 @@ class ManageClubs extends Component
     public $activeMenu;
 
     protected $listeners = ['deleteClub'];
+
+    public function mount()
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Allow only super_admins to view clubs
+        if ($user && $user->role === 'super_admin') {
+            $this->clubs = Clubs::all();
+        } else {
+            abort(403, 'Unauthorized Access');
+        }
+    }
 
     public function render()
     {

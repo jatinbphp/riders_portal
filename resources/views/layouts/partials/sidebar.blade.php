@@ -13,18 +13,26 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                @if(auth()->user()->role === 'super_admin')
+                    <li class="nav-item"><a href="{{ route('athlete.index') }}" class="nav-link {{ request()->is('athlete.index') ? 'active' : '' }}" wire:navigate>
+                    <i class="nav-icon fas fa-biking"></i>
+                        <p>Manage Athletes</p>
+                    </a></li>
+                @endif
                 <li class="nav-item">
                     <a href="{{ route('profile') }}" class="nav-link {{ request()->is('profile') ? 'active' : '' }}" wire:navigate>
                         <i class="nav-icon fas fa-file"></i>
                         <p>Profile Management</p>
                     </a>
-                </li>
+                </li>     
+                @if(auth()->check() && auth()->user()->role === 'super_admin')
                 <li class="nav-item">
                     <a href="{{ route('clubs') }}" class="nav-link {{ request()->is('manage-clubs') ? 'active' : '' }}" wire:navigate>
                         <i class="nav-icon fa fa-clipboard"></i>
                         <p>Clubs</p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{ route('social-links') }}" class="nav-link {{ request()->is('social-links') ? 'active' : '' }}" wire:navigate>
                         <i class="nav-icon fa fa-clipboard"></i>
@@ -39,7 +47,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('document.uploads') }}" class="nav-link {{ request()->is('document-uploads') ? 'active' : '' }}" wire:navigate>
-                        <i class="nav-icon fa fa-upload"></i>
+                        <i class="nav-icon fa fa-file-pdf"></i>
                         <p>Document Uploads</p>
                     </a>
                 </li>

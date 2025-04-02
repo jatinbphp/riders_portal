@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Livewire\ManageSocialLinks;
-
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\SocialLinks;
 
@@ -54,6 +54,7 @@ class ManageSocialLinksForm extends Component
             'instagram' => $this->instagram,
             'linkedin' => $this->linkedin,
             'status' => $this->status,
+            'user_id' => auth()->id(),
         ];
 
         if($this->linkId){

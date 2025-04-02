@@ -1,9 +1,9 @@
 <?php
 namespace App\Livewire\DocumentUploads;
-
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\DocumentUpload; // Make sure you have this model
+use App\Models\DocumentUpload;  
 
 class DocumentUploadsForm extends Component
 {
@@ -19,7 +19,6 @@ class DocumentUploadsForm extends Component
     public $flexibility;
     public $document;
 
-    // Validation rules
     protected $rules = [
         'speed' => 'required|numeric|min:1|max:100',
         'strength' => 'required|numeric|min:1|max:100',
@@ -29,16 +28,37 @@ class DocumentUploadsForm extends Component
         'document' => 'required|file|mimes:pdf,doc,docx,pptx,xlsx|max:10240', // 10MB max size
     ]; 
 
-    // Submit the form
-    public function submit()
+    public function render()
     {
-        // Validate the data
+        return view('livewire.document-uploads.document-uploads-form')->extends('layouts.app');
+    }
+
+     public function mount($id = null)
+    {
+        $this->menu = "Document Uploads";
+        $this->breadcrumb = [
+            ['route' => 'document-uploads.create', 'title' => 'Document Uploads'],
+        ];
+        $this->activeMenu = 'Add Data';
+        $this->status = 1;
+
+        if ($id) {
+            $this->activeMenu = 'Edit';
+            $document = DocumentUpload::findOrFail($id);
+            $this->documentId = $document->id;
+            $this->name = $document->name;
+            $this->description = $document->description;
+            $this->status = $document->status;
+            $this->document_path = $document->document_path;
+        }
+    }
+ 
+    public function submit()
+    { 
         $this->validate();
-
-        // Store the document
+ 
         $documentPath = $this->document->store('documents', 'public');
-
-        // Save the form data to the database
+ 
         DocumentUpload::create([
             'speed' => $this->speed,
             'strength' => $this->strength,
@@ -46,18 +66,13 @@ class DocumentUploadsForm extends Component
             'endurance' => $this->endurance,
             'flexibility' => $this->flexibility,
             'document_path' => $documentPath,
+            'user_id' => auth()->id(),
         ]);
-
-        // Optionally flash a success message
+ 
         session()->flash('message', 'Document uploaded successfully!');
-
-        // Reset the form fields
+ 
         $this->reset(['speed', 'strength', 'agility', 'endurance', 'flexibility', 'document']);
     }
-
-    // Render the component view
-    public function render()
-    {
-        return view('livewire.document-uploads.document-uploads-form')->extends('layouts.app');
-    }
+ 
+    
 }

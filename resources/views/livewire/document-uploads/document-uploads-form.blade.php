@@ -7,7 +7,7 @@
     <section class="content">
         <div class="row">
             <div class="col-12">
-                <div class="card card-info card-outline">
+                <div class="card card-info">
                     <div class="card-header">
                         <h3 class="card-title">Upload Performance Data</h3>
                     </div>

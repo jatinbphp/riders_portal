@@ -4,7 +4,7 @@ namespace App\Livewire\ManageClubs;
 
 use Livewire\Component;
 use App\Models\Clubs;
-
+use Illuminate\Support\Facades\Auth;
 
 class ManageClubForm extends Component
 {
@@ -21,19 +21,26 @@ class ManageClubForm extends Component
 
     public function mount($id = null)
     {
-        $this->menu = "Clubs";
-        $this->breadcrumb = [
-            ['route' => 'clubs', 'title' => 'Clubs'],
-        ];
-        $this->activeMenu = 'Add';
-        $this->status = 1;
-        if($id){
-            $this->activeMenu = 'Edit';
-            $club = Clubs::findOrFail($id);
-            $this->clubId = $club->id;
-            $this->name = $club->name;
-            $this->description = $club->description;
-            $this->status = $club->status;
+        $user = Auth::user(); 
+        if ($user && $user->role === 'super_admin') {
+            
+            $this->menu = "Clubs";
+            $this->breadcrumb = [
+                ['route' => 'clubs', 'title' => 'Clubs'],
+            ];
+            $this->activeMenu = 'Add';
+            $this->status = 1;
+            if($id){
+                $this->activeMenu = 'Edit';
+                $club = Clubs::findOrFail($id);
+                $this->clubId = $club->id;
+                $this->name = $club->name;
+                $this->description = $club->description;
+                $this->status = $club->status;
+            }
+
+        } else {
+            abort(403, 'Unauthorized Access');
         }
     }
 
