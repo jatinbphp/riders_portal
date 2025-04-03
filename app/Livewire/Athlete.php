@@ -6,6 +6,9 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class Athlete extends Component
 {
@@ -14,12 +17,18 @@ class Athlete extends Component
     public $menu;
     public $breadcrumb;
     public $activeMenu;
-    public $name, $email, $status, $athlete_id;
+    public $firstname, $lastname, $email, $password, $confirmpassword, $status, $athlete_id;
     public $isEditMode = false;
 
+    
+    protected $listeners = ['athleteDeleted' => 'deleteAthlete'];
+
     protected $rules = [
-        'name' => 'required|string|max:255',
+        'firstname' => 'required|string|max:255',
+        'lastname' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6|same:confirmpassword',
+        'confirmpassword' => 'required|min:6',
     ];
 
     public function mount()
@@ -30,15 +39,18 @@ class Athlete extends Component
 
         $this->menu = "Athletes";
         $this->breadcrumb = [
-            ['route' => route('dashboard'), 'title' => 'Dashboard'], // Ensure the route is correct
+            ['route' => route('dashboard'), 'title' => 'Dashboard'],
         ];
         $this->activeMenu = 'Athletes'; 
     }
 
     public function resetFields()
     {
-        $this->name = '';
+        $this->firstname = '';
+        $this->lastname = '';
         $this->email = '';
+        $this->password = '';
+        $this->confirmpassword = '';
         $this->status = 1;
         $this->athlete_id = null;
         $this->isEditMode = false;
@@ -49,13 +61,15 @@ class Athlete extends Component
         $this->validate();
 
         User::create([
-            'name' => $this->name,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
             'email' => $this->email,
+            'password' => Hash::make($this->password),
             'status' => $this->status,
             'role' => 'athlete',
         ]);
 
-        session()->flash('message', 'Athlete added successfully.');
+        session()->flash('success', 'Athlete added successfully.');
         $this->resetFields();
     }
 
@@ -63,55 +77,58 @@ class Athlete extends Component
     {
         $athlete = User::findOrFail($id);
         $this->athlete_id = $athlete->id;
-        $this->name = $athlete->name;
+        $this->firstname = $athlete->firstname;
+        $this->lastname = $athlete->lastname;
         $this->email = $athlete->email;
         $this->status = $athlete->status;
         $this->isEditMode = true;
     }
 
-    public function getAthletesData(Request $request)
-    {
-        $query = User::where('role', 'athlete');
-
-        return DataTables::of($query)
-            ->addColumn('actions', function ($athlete) {
-                return view('components.athlete-actions', compact('athlete'));
-            })
-            ->rawColumns(['actions'])
-            ->make(true);
-    }
-
     public function update()
     {
         $this->validate([
-            'name' => 'required|string|max:255',
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $this->athlete_id,
         ]);
 
         $athlete = User::findOrFail($this->athlete_id);
         $athlete->update([
-            'name' => $this->name,
+            'lastname' => $this->lastname,
             'email' => $this->email,
             'status' => $this->status,
         ]);
 
-        session()->flash('message', 'Athlete updated successfully.');
+        session()->flash('success', 'Athlete updated successfully.');
         $this->resetFields();
     }
 
-    public function delete($id)
+    public function deleteAthlete($athleteId) // Expect a single ID, not an array
     {
-        User::findOrFail($id)->delete();
-        session()->flash('message', 'Athlete deleted successfully.');
+        $athlete = User::find($athleteId);
+        
+        if ($athlete) {
+            $athlete->delete();
+            session()->flash('success', 'Athlete deleted successfully.');
+        } else {
+            session()->flash('error', 'Athlete not found.');
+        }
+
+        // Emit event to refresh table after deletion
+        $this->dispatch('deleteAthlete');
     }
 
     public function toggleStatus($id)
     {
         $athlete = User::findOrFail($id);
-        $athlete->update(['status' => !$athlete->status]);
+        $athlete->status = !$athlete->status; // Toggle status using boolean
+        $athlete->save();
 
-        session()->flash('message', 'Status updated successfully.');
-    } 
+        session()->flash('success', 'Status updated successfully.');
+
+        // Refresh the component after updating status
+        $this->dispatch('statusUpdated');
+    }
 
     public function render()
     {
@@ -125,7 +142,6 @@ class Athlete extends Component
 
         $athletes = User::where('role', 'athlete')->paginate(10);
 
-        return view('livewire.athlete')->extends('layouts.app'); 
+        return view('livewire.athlete', compact('athletes'))->extends('layouts.app');
     } 
-
 }

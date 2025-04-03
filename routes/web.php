@@ -17,7 +17,7 @@ use App\Livewire\ManageUploads\ManageUploadsForm;
 use App\Livewire\DocumentUploads; 
 use App\Livewire\DocumentUploads\DocumentUploadsForm; 
 use App\Livewire\Athlete;
-use App\Livewire\AthleteForm;
+use App\Livewire\Athlete\AthleteForm;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -56,9 +56,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/document-uploads/create', DocumentUploadsForm::class)->name('document-uploads.create');
     Route::get('/document-uploads/data', [DocumentUploads::class, 'getDocumentsData'])->name('document-uploads.data');
 
-    Route::get('/athletes', Athlete::class)->name('athlete.index');
-    Route::get('/athletes/create', Athlete::class)->name('athlete.create');
+    Route::get('/athletes', Athlete::class)->name('athlete');
+    Route::get('/athletes/create', AthleteForm::class)->name('athlete.create');
     Route::get('/athletes/data', [AthleteForm::class, 'getAthletesData'])->name('athlete.data');
+    Route::get('/athletes/{id}/edit', AthleteForm::class)->name('athlete.edit');
 
 });
 

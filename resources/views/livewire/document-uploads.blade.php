@@ -49,7 +49,6 @@
 @section('js')
     <script>
         $(document).ready(function () {  
-            function loadDataTable() {
                 if ($.fn.DataTable.isDataTable('#documentUploads')) {
                     $('#documentUploads').DataTable().destroy();
                 }
@@ -69,9 +68,7 @@
                         { data: 'actions', name: 'actions', orderable: false, searchable: false }
                     ]
                 });
-            }
- 
-            loadDataTable();
+            } 
  
             $(document).on('click', '.delete-btn', function () {
                 let documentId = $(this).data('id');

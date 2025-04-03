@@ -6,6 +6,7 @@ use Livewire\WithFileUploads;
 use App\Models\Clubs;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class Profile extends Component
 {
@@ -69,18 +70,20 @@ class Profile extends Component
         ]);
 
         $profile = Auth::user();
-        $profile->update([
-            'firstname' => $this->firstname,
-            'lastname' => $this->lastname,
-            'email' => $this->email,          
-            'height' => $this->height,
-            'weight' => $this->weight,
-            'sport_type' => $this->sport_type,
-            'specialization' => $this->specialization,
-            // 'about' => $this->about,
-            'club_id' => $this->club_id,
-            'status' => $this->status ?? false, // Default to false if null
-        ]);
+
+    // Assign values manually
+    $profile->firstname = $this->firstname;
+    $profile->lastname = $this->lastname;
+    $profile->email = $this->email;
+    $profile->height = $this->height;
+    $profile->weight = $this->weight;
+    $profile->sport_type = $this->sport_type;
+    $profile->specialization = $this->specialization;
+    $profile->club_id = $this->club_id; // Manually setting club_id
+    $profile->status = $this->status ?? false;
+
+    // Save the updated profile
+    $profile->save();
 
 
         // Update password if provided
@@ -96,5 +99,10 @@ class Profile extends Component
         session()->flash('success', 'Profile updated successfully!');
 
         $this->redirect(route('dashboard'), navigate: true);
+    }
+
+    public function updateClub()
+    {
+        $this->club_id = (int) $this->club_id;
     }
 }

@@ -4,6 +4,7 @@
         'breadcrumb' => $breadcrumb,
         'active' => $activeMenu
     ])
+    
     <section class="content">
         <div class="row">
             <div class="col-12">
@@ -21,13 +22,14 @@
                         </div>
                     </div>
 
-                    <input type="hidden" id="route_name" value="{{ route('athlete.data') }}">
+                    <input type="hidden" id="route_name" value="{{ route('athlete') }}">
                     <div class="card-body table-responsive" wire:ignore>
                         <table id="athleteTable" class="table table-bordered table-striped datatable-dynamic"> 
                             <thead>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="15%">Name</th>
+                                    <th width="15%">First Name</th>
+                                    <th width="15%">Last Name</th>
                                     <th width="20%">Email</th>
                                     <th width="10%">Status</th>
                                     <th width="10%">Actions</th>
@@ -57,12 +59,10 @@
                     ajax: "{{ route('athlete.data') }}",
                     columns: [
                         { data: 'id', name: 'id' },
-                        { data: 'name', name: 'name' },
+                        { data: 'firstname', name: 'firstname' },
+                        { data: 'lastname', name: 'lastname' },
                         { data: 'email', name: 'email' },
-                        { data: 'status', name: 'status', render: function (data, type, row) {
-                            return row.status ? '<span class="badge badge-success">Active</span>' 
-                                              : '<span class="badge badge-danger">Inactive</span>';
-                        }},
+                        { data: 'status', name: 'status'},
                         { data: 'actions', name: 'actions', orderable: false, searchable: false }
                     ]
                 });
@@ -83,21 +83,28 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Livewire.dispatch('deleteAthlete', { athleteId: athleteId });
+                        Livewire.dispatch('athleteDeleted', { athleteId: athleteId }); // Use 'emit' instead of 'dispatch'
                     }
                 });
             });
- 
-            Livewire.on('athleteDeleted', function () {
-                loadDataTable();
+
+            Livewire.on('deleteAthlete', function () {
+                loadDataTable(); // Ensure this function refreshes the table properly
             });
- 
-            $(document).on('click', '.status-btn', function () {
+
+            $(document).on('change', '.status-toggle', function () {
                 let athleteId = $(this).data('id');
                 Livewire.dispatch('updateAthleteStatus', { id: athleteId });
             });
- 
+
             Livewire.on('statusUpdated', function () {
+                Swal.fire({
+                    title: "Status Updated!",
+                    text: "The athlete's status has been changed successfully.",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
                 loadDataTable();
             });
         });

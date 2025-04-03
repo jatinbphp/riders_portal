@@ -69,7 +69,7 @@ class DocumentUploads extends Component
                 if (!empty($row->document_path)) {
                     $url = asset('storage/' . $row->document_path); // Ensure storage link exists
                     return '<a href="' . $url . '" target="_blank" class="btn btn-sm btn-primary">
-                                <i class="fa fa-download"></i> Download
+                                <i class="fa fa-download"></i> 
                             </a>';
                 }
                 return 'No File';

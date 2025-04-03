@@ -28,12 +28,12 @@
                             <thead>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="25%">Facebook</th>
-                                    <th width="25%">Twitter</th>
-                                    <th width="25%">Instagram</th>
-                                    <th width="25%">Linkedin</th>
-                                    <th width="10%">Status</th>
-                                    <th width="10%">Action</th>
+                                    <th width="17%">Facebook</th>
+                                    <th width="17%">Twitter</th>
+                                    <th width="17%">Instagram</th>
+                                    <th width="17%">Linkedin</th>
+                                    <th width="17%">Status</th>
+                                    <th width="40%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

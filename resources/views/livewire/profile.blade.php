@@ -54,7 +54,7 @@
                                         @error('password_confirmation') <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
-
+                                @if(auth()->user()->role !== 'super_admin')
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Height (cm):</label>
@@ -80,16 +80,17 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Club:</label>
-                                        <select name="club_id" class="form-control">
-                                            <option value="">Select Club</option>
-                                            @foreach ($clubs as $club)
-                                                <option value="{{ $club->id }}">{{ $club->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+    <div class="form-group">
+        <label>Club:</label>
+        <select name="club_id" class="form-control" wire:model.lazy="club_id" wire:change="updateClub">
+            <option value="">Select Club</option>
+            @foreach ($clubs as $club)
+                <option value="{{ $club->id }}">{{ $club->name }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
 
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -99,7 +100,6 @@
                                     </div>
                                 </div>
 
-                             
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Status:</label>
@@ -112,6 +112,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Update</button>

@@ -14,7 +14,7 @@
                     </a>
                 </li>
                 @if(auth()->user()->role === 'super_admin')
-                    <li class="nav-item"><a href="{{ route('athlete.index') }}" class="nav-link {{ request()->is('athlete.index') ? 'active' : '' }}" wire:navigate>
+                    <li class="nav-item"><a href="{{ route('athlete') }}" class="nav-link {{ request()->is('athlete') ? 'active' : '' }}" wire:navigate>
                     <i class="nav-icon fas fa-biking"></i>
                         <p>Manage Athletes</p>
                     </a></li>
