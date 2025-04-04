@@ -76,6 +76,37 @@
                     }
                 }
             }
+  
+     function viewAthlete(athleteId) {
+        fetch(`/athletes/${athleteId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+
+                document.getElementById("firstname").innerText = data.firstname;
+                document.getElementById("lastname").innerText = data.lastname;
+                document.getElementById("email").innerText = data.email;
+                document.getElementById("height").innerText = data.height;
+                document.getElementById("weight").innerText = data.weight;
+                document.getElementById("sport_type").innerText = data.sport_type;
+                document.getElementById("specialization").innerText = data.specialization;
+
+                // Open Bootstrap Modal
+                var myModal = new bootstrap.Modal(document.getElementById('athleteModal'));
+                myModal.show();
+            })
+            .catch(error => console.error('Error fetching athlete:', error));
+    }
+
+    function closeModal() {
+        let modal = document.getElementById("athleteModal");
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    }
+
 
             document.addEventListener("DOMContentLoaded", function () {
                 if (window.themeScriptLoaded) return; // Prevents duplicate execution

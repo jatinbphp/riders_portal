@@ -28,16 +28,21 @@
                             <thead>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="15%">First Name</th>
-                                    <th width="15%">Last Name</th>
-                                    <th width="20%">Email</th>
-                                    <th width="10%">Status</th>
-                                    <th width="10%">Actions</th>
+                                    <th width="10%">First Name</th>
+                                    <th width="10%">Last Name</th>
+                                    <th width="15%">Email</th>
+                                    <!-- <th width="5%">Height</th>
+                                    <th width="5%">Weight</th>
+                                    <th width="10%">Sport Type</th>
+                                    <th width="10%">Specialization</th> -->
+                                    <th width="7%">Status</th>
+                                    <th width="7%">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
-                        </table>
+                        </table> 
+                        @livewire('athlete-view')
                     </div>
                 </div>
             </div>
@@ -62,6 +67,10 @@
                         { data: 'firstname', name: 'firstname' },
                         { data: 'lastname', name: 'lastname' },
                         { data: 'email', name: 'email' },
+                      /*  { data: 'height', name: 'height' },
+                        { data: 'weight', name: 'weight' },
+                        { data: 'sport_type', name: 'sport_type' },
+                        { data: 'specialization', name: 'specialization' },*/
                         { data: 'status', name: 'status'},
                         { data: 'actions', name: 'actions', orderable: false, searchable: false }
                     ]

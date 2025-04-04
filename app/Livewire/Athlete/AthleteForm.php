@@ -85,7 +85,7 @@ class AthleteForm extends Component
 	    }
 
 	    // Fetch only athletes
-	    $query = User::where('role', 'athlete')->select(['id', 'firstname', 'lastname', 'email', 'status']);
+	    $query = User::where('role', 'athlete')->select(['id', 'firstname', 'lastname', 'email', 'height', 'weight', 'sport_type', 'specialization', 'status']);
 
 	    return DataTables::of($query)
 	        ->addColumn('actions', function ($athlete) { 

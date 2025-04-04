@@ -33,12 +33,14 @@
                     </a>
                 </li>
                 @endif
+                @if(auth()->user()->role === 'athlete')
                 <li class="nav-item">
                     <a href="{{ route('social-links') }}" class="nav-link {{ request()->is('social-links') ? 'active' : '' }}" wire:navigate>
                         <i class="nav-icon fa fa-clipboard"></i>
                         <p>Social Links</p>
                     </a>
                 </li>
+                 @endif
                 <li class="nav-item">
                     <a href="{{ route('uploads') }}" class="nav-link {{ request()->is('manage-uploads') ? 'active' : '' }}" wire:navigate>
                         <i class="nav-icon fa fa-upload"></i>

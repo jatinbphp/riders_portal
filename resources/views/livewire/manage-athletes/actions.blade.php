@@ -6,7 +6,12 @@
             </a>
             <a class="btn btn-danger btn-sm delete-btn" data-id="{{ $athlete->id }}">
                 <i class="fas fa-trash"></i>
-            </a>
+            </a> 
+            <button class="btn btn-sm btn-primary" onclick="viewAthlete({{ $athlete->id }})">
+                <i class="fas fa-eye"></i>
+            </button>
+
+
         </div>
     @endif
 

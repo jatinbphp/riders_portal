@@ -18,6 +18,7 @@ use App\Livewire\DocumentUploads;
 use App\Livewire\DocumentUploads\DocumentUploadsForm; 
 use App\Livewire\Athlete;
 use App\Livewire\Athlete\AthleteForm;
+use App\Http\Controllers\AthleteController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -25,7 +26,7 @@ Route::get('/', function () {
 
 if (App::environment('local')) {
     Livewire::setUpdateRoute(function($handle) {
-        return Route::get('/protouchglobal/livewire/update', $handle);
+        return Route::get('/livewire/update', $handle);
     });
 }
 
@@ -72,6 +73,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/athletes/create', AthleteForm::class)->name('athlete.create');
     Route::get('/athletes/data', [AthleteForm::class, 'getAthletesData'])->name('athlete.data');
     Route::get('/athletes/{id}/edit', AthleteForm::class)->name('athlete.edit');
+ 
+    Route::get('/athletes/{id}', [AthleteController::class, 'show']);
+
 
 });
 
