@@ -17,6 +17,7 @@ class Profile extends Component
     public $menu;
     public $breadcrumb;
     public $activeMenu;
+    public $userRole;
 
     public function mount()
     {       
@@ -25,6 +26,8 @@ class Profile extends Component
         $this->activeMenu = 'Edit';
 
         $this->clubs = Clubs::where('status', 1)->get(['id', 'name']);
+        $this->userRole = Auth::user()?->role;  
+
 
         $profile = Auth::user();
 
@@ -51,55 +54,61 @@ class Profile extends Component
     }
 
     public function updateProfile()
-    {     
-
-        $this->validate([
+    {
+        $commonRules = [
             'firstname' => 'required|string',
             'lastname' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $this->userId, 
-            'password' => 'nullable|min:6|confirmed', 
-            'password_confirmation' => 'nullable|min:6',           
+            'email' => 'required|email|unique:users,email,' . $this->userId,
+            'password' => 'nullable|min:6|confirmed',
+            'password_confirmation' => 'nullable|min:6',
+        ];
+
+        $athleteExtraRules = [
             'height' => 'nullable|numeric',
             'weight' => 'nullable|numeric',
-            'sport_type' => 'required|string', 
+            'sport_type' => 'required|string',
             'specialization' => 'nullable|string',
-            // 'about' => 'nullable|string',
             'club_id' => 'nullable|exists:clubs,id',
-            // 'image' => 'nullable|image|max:1024', // 1MB max
-            'status' => 'boolean'
-        ]);
+            'status' => 'boolean',
+        ];
+
+        // Conditional validation
+        $rules = $this->userRole === 'athlete'
+            ? array_merge($commonRules, $athleteExtraRules)
+            : $commonRules;
+
+        $this->validate($rules);
 
         $profile = Auth::user();
 
-    // Assign values manually
-    $profile->firstname = $this->firstname;
-    $profile->lastname = $this->lastname;
-    $profile->email = $this->email;
-    $profile->height = $this->height;
-    $profile->weight = $this->weight;
-    $profile->sport_type = $this->sport_type;
-    $profile->specialization = $this->specialization;
-    $profile->club_id = $this->club_id; // Manually setting club_id
-    $profile->status = $this->status ?? false;
+        $profile->firstname = $this->firstname;
+        $profile->lastname = $this->lastname;
+        $profile->email = $this->email;
 
-    // Save the updated profile
-    $profile->save();
+        if ($this->userRole === 'athlete') {
+            $profile->height = $this->height;
+            $profile->weight = $this->weight;
+            $profile->sport_type = $this->sport_type;
+            $profile->specialization = $this->specialization;
+            $profile->club_id = $this->club_id;
+            $profile->status = $this->status ?? false;
+        }
 
-
-        // Update password if provided
         if ($this->password) {
-            $profile->update(['password' => Hash::make($this->password)]);
+            $profile->password = Hash::make($this->password);
         }
 
         if ($this->image) {
             $path = $this->image->store('images', 'public');
-            $profile->update(['image' => $path]);
+            $profile->image = $path;
         }
 
-        session()->flash('success', 'Profile updated successfully!');
+        $profile->save();
 
+        session()->flash('success', 'Profile updated successfully!');
         $this->redirect(route('dashboard'), navigate: true);
     }
+
 
     public function updateClub()
     {

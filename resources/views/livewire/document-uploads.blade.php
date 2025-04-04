@@ -47,60 +47,69 @@
 </div>
 
 @section('js')
-    <script>
-        $(document).ready(function () {  
-                if ($.fn.DataTable.isDataTable('#documentUploads')) {
-                    $('#documentUploads').DataTable().destroy();
-                }
+<script>
+    function initializeDataTable() {
+        let table = $('#documentUploads');
 
-                $('#documentUploads').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: "{{ route('document-uploads.data') }}",
-                    columns: [
-                        { data: 'id', name: 'id' },
-                        { data: 'speed', name: 'speed' },
-                        { data: 'strength', name: 'strength' },
-                        { data: 'agility', name: 'agility' },
-                        { data: 'endurance', name: 'endurance' },
-                        { data: 'flexibility', name: 'flexibility' },
-                        { data: 'document_path', name: 'document_path' },
-                        { data: 'actions', name: 'actions', orderable: false, searchable: false }
-                    ]
-                });
-            } 
- 
-            $(document).on('click', '.delete-btn', function () {
-                let documentId = $(this).data('id');
+        // Destroy DataTable if it exists
+        if ( $.fn.DataTable.isDataTable(table) ) {
+            table.DataTable().destroy(); // Fully remove DataTable instance
+            table.find('tbody').empty(); // Clear table body to avoid duplicates
+        }
 
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "This document will be permanently deleted!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Livewire.dispatch('deleteDocument', { documentId: documentId });
-                    }
-                });
+        // Reinitialize DataTable
+        setTimeout(() => {
+            table.DataTable({
+                processing: true,
+                serverSide: true,
+                destroy: true, // Ensure clean reinitialization
+                ajax: "{{ route('document-uploads.data') }}",
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'speed', name: 'speed' },
+                    { data: 'strength', name: 'strength' },
+                    { data: 'agility', name: 'agility' },
+                    { data: 'endurance', name: 'endurance' },
+                    { data: 'flexibility', name: 'flexibility' },
+                    { data: 'document_path', name: 'document_path' },
+                    { data: 'actions', name: 'actions', orderable: false, searchable: false }
+                ]
             });
- 
-            Livewire.on('documentDeleted', function () {
-                loadDataTable();
-            });
- 
-            $(document).on('click', '.status-btn', function () {
-                let documentId = $(this).data('id');
-                Livewire.dispatch('updateStatus', { id: documentId });
-            });
- 
-            Livewire.on('statusUpdated', function () {
-                loadDataTable();
-            });
+        }, 500); // Slight delay to allow DOM updates
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        initializeDataTable(); // Run on first load
+    });
+
+    Livewire.hook('message.processed', (message, component) => {
+        initializeDataTable(); // Run after Livewire updates
+    });
+
+    $(document).on('click', '.delete-btn', function () {
+        let documentId = $(this).data('id');
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "This document will be permanently deleted!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('deleteDocument', { documentId });
+            }
         });
-    </script>
+    });
+
+    $(document).on('click', '.status-btn', function () {
+        let documentId = $(this).data('id');
+        Livewire.dispatch('updateStatus', { id: documentId });
+    });
+
+</script>
 @endsection
+
 

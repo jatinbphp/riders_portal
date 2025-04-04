@@ -23,6 +23,18 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+if (App::environment('local')) {
+    Livewire::setUpdateRoute(function($handle) {
+        return Route::get('/protouchglobal/livewire/update', $handle);
+    });
+}
+
+if (App::environment('production')) {
+    Livewire::setUpdateRoute(function($handle) {
+        return Route::get('/protouchglobal/livewire/update', $handle);
+    });
+}
+
 Route::get('/register', Register::class)->name('register');
 Route::get('/login', Login::class)->name('login');
 Route::get('/logout', Logout::class)->name('logout');

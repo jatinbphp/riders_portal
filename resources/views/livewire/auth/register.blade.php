@@ -9,6 +9,12 @@
         </div>
 
         <div class="mb-3">
+            <label class="block text-sm">Last Name</label>
+            <input type="text" wire:model="lastname" class="w-full p-2 border rounded">
+            @error('lastname') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="mb-3">
             <label class="block text-sm">Email</label>
             <input type="email" wire:model="email" class="w-full p-2 border rounded">
             @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
