@@ -59,27 +59,46 @@ class DocumentUploads extends Component
             ]
         );
 
-        session()->flash('message', 'Profile stats saved successfully!');
-    }  
+        session()->flash('success', 'Profile stats saved successfully!');
 
-    public function getDocumentsData()
-    {
-        return DataTables::of(DocumentUpload::select())
-            ->addColumn('document_path', function ($row) {
-                if (!empty($row->document_path)) {
-                    $url = asset('storage/' . $row->document_path); // Ensure storage link exists
-                    return '<a href="' . $url . '" target="_blank" class="btn btn-sm btn-primary">
-                                <i class="fa fa-download"></i> 
-                            </a>';
-                }
-                return 'No File';
-            })
-            ->addColumn('actions', function ($row) {
-                return view('livewire.document-uploads.actions', ['document' => $row, 'type' => 'action']);
-            })
-            ->rawColumns(['document_path', 'actions']) // Ensures HTML is rendered correctly
-            ->make(true);
+        return redirect()->route('document-uploads'); // 👈
+    }  
+ 
+
+public function getDocumentsData()
+{
+    $user = Auth::user();
+    $isSuperAdmin = $user->role === 'super_admin';
+
+    $query = DocumentUpload::select();
+
+    $dataTable = DataTables::of($query)
+        ->addColumn('document_path', function ($row) {
+            if (!empty($row->document_path)) {
+                $url = asset('storage/' . $row->document_path);
+                return '<a href="' . $url . '" target="_blank" class="btn btn-sm btn-primary">
+                            <i class="fa fa-download"></i>
+                        </a>';
+            }
+            return 'No File';
+        });
+
+    // Only add the 'actions' column if NOT super_admin
+    if (!$isSuperAdmin) {
+        $dataTable->addColumn('actions', function ($row) {
+            return view('livewire.document-uploads.actions', [
+                'document' => $row,
+                'type' => 'action',
+            ]);
+        });
     }
+
+    return $dataTable
+        ->rawColumns(['document_path', 'actions']) // Safe to include 'actions' even if not added
+        ->make(true);
+}
+
+
 
 
     public function deleteDocument($documentId)
@@ -105,7 +124,7 @@ class DocumentUploads extends Component
             ['document_path' => $path]
         );
 
-        session()->flash('document_message', 'Document uploaded successfully!');
+        session()->flash('success', 'Document uploaded successfully!');
     } 
 
     public function render()

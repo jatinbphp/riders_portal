@@ -54,7 +54,7 @@ class ManageUploadsForm extends Component
         ]);
 
         // Send success message
-        session()->flash('message', 'File uploaded successfully!');
+        session()->flash('success', 'File uploaded successfully!');
 
         $this->redirect(route('uploads'), navigate: true);
     }

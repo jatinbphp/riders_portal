@@ -13,15 +13,19 @@
                             <div class="col">
                                 <span class="h6 mb-0">Manage {{$menu}}</span>
                             </div>
+                            @if(auth()->user()->role === 'athlete')
                             <div class="col-auto">
                                 <a href="{{route('uploads.create')}}" class="btn btn-sm btn-info" wire:navigate>
                                     <i class="fa fa-plus pr-1"></i> Add New
                                 </a>
                             </div>
+                            @endif
                         </div>
                     </div>
 
                     <input type="hidden" id="route_name" value="{{ route('uploads.data') }}">
+                    <input type="hidden" id="user_role" value="{{ auth()->user()->role }}">
+
                     <div class="card-body table-responsive" wire:ignore>
                         <table id="uploads" class="table table-bordered table-striped datatable-dynamic">
                             <thead>
@@ -29,7 +33,9 @@
                                     <th width="5%">#</th>
                                     <th width="37%">Title</th>
                                     <th width="40%">Image / video</th>
+                                    @if(auth()->user()->role === 'athlete')
                                     <th width="8%">Action</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>

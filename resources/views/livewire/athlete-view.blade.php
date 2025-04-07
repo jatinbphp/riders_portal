@@ -3,8 +3,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="athleteModalLabel">Athlete Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="athleteModalLabel">Athlete Details</h5> 
             </div>
             <div class="modal-body">
                 <p><strong>First Name:</strong> <span id="firstname"></span></p>

@@ -1,10 +1,12 @@
 @if(isset($type))
     @if($type == 'action')
-        <div class="action-buttons">
-            <a class="btn btn-danger btn-sm delete-btn" data-id="{{ $uploads->id }}">
-                <i class="fas fa-trash"></i>
-            </a>
-        </div>
+        @if(auth()->user()->role === 'athlete')
+            <div class="action-buttons">
+                <a class="btn btn-danger btn-sm delete-btn" data-id="{{ $uploads->id }}">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </div>
+        @endif
     @endif
     @if($type == 'image')
         @if ($uploads->type == $typeImage)

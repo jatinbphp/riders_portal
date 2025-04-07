@@ -47,12 +47,14 @@
                         <p>Uploads</p>
                     </a>
                 </li>
+                @if(auth()->check() && auth()->user()->role === 'super_admin')
                 <li class="nav-item">
                     <a href="{{ route('document.uploads') }}" class="nav-link {{ request()->is('document-uploads') ? 'active' : '' }}" wire:navigate>
                         <i class="nav-icon fa fa-file-pdf"></i>
                         <p>Document Uploads</p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{ route('logout') }}" class="nav-link" wire:click="logout">
                         <i class="nav-icon fa fa-sign-out-alt"></i>

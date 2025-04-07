@@ -69,9 +69,11 @@ class DocumentUploadsForm extends Component
             'user_id' => auth()->id(),
         ]);
  
-        session()->flash('message', 'Document uploaded successfully!');
+        session()->flash('success', 'Document uploaded successfully!');
  
         $this->reset(['speed', 'strength', 'agility', 'endurance', 'flexibility', 'document']);
+ 
+        $this->redirect(route('document.uploads'), navigate: true);
     }
  
     

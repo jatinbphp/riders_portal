@@ -1,33 +1,34 @@
 <?php
+
 namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\Clubs;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Clubs;
+use App\Models\User;
+use App\Models\DocumentUpload;
 
 class Profile extends Component
 {
+    use WithFileUploads;
+
     public $user;
     public $userId, $firstname, $lastname, $email, $password, $password_confirmation;
     public $sport_type, $specialization, $height, $weight, $about, $club_id, $image, $status;
-    public $clubs;
-    public $menu;
-    public $breadcrumb;
-    public $activeMenu;
-    public $userRole;
+    public $speed, $strength, $agility, $endurance, $flexibility, $document_path;
+    public $clubs, $menu, $breadcrumb, $activeMenu, $userRole;
 
     public function mount()
-    {       
+    {
         $this->menu = "Profile";
         $this->breadcrumb = [['route' => 'profile', 'title' => 'Profile']];
         $this->activeMenu = 'Edit';
 
         $this->clubs = Clubs::where('status', 1)->get(['id', 'name']);
-        $this->userRole = Auth::user()?->role;  
-
+        $this->userRole = Auth::user()?->role;
 
         $profile = Auth::user();
 
@@ -40,11 +41,19 @@ class Profile extends Component
             $this->specialization = $profile->specialization;
             $this->height = $profile->height;
             $this->weight = $profile->weight;
-            // $this->about = $profile->about;
             $this->club_id = $profile->club_id;
             $this->status = $profile->status;
-        }
 
+            // Load document data if exists
+            $document = DocumentUpload::where('user_id', $profile->id)->first();
+            if ($document) {
+                $this->speed = $document->speed;
+                $this->strength = $document->strength;
+                $this->agility = $document->agility;
+                $this->endurance = $document->endurance;
+                $this->flexibility = $document->flexibility;
+            }
+        }
     }
 
     public function render()
@@ -72,15 +81,23 @@ class Profile extends Component
             'status' => 'boolean',
         ];
 
-        // Conditional validation
-        $rules = $this->userRole === 'athlete'
-            ? array_merge($commonRules, $athleteExtraRules)
-            : $commonRules;
+        $documentRules = [
+            'speed' => 'required|integer|min:0|max:100',
+            'strength' => 'required|integer|min:0|max:100',
+            'agility' => 'required|integer|min:0|max:100',
+            'endurance' => 'required|integer|min:0|max:100',
+            'flexibility' => 'required|integer|min:0|max:100',
+            'document_path' => 'nullable|file|mimes:pdf,jpg,png,doc,docx|max:2048',
+        ];
+
+        $rules = array_merge(
+            $this->userRole === 'athlete' ? array_merge($commonRules, $athleteExtraRules) : $commonRules,
+            $documentRules
+        );
 
         $this->validate($rules);
 
         $profile = Auth::user();
-
         $profile->firstname = $this->firstname;
         $profile->lastname = $this->lastname;
         $profile->email = $this->email;
@@ -105,10 +122,35 @@ class Profile extends Component
 
         $profile->save();
 
-        session()->flash('success', 'Profile updated successfully!');
-        $this->redirect(route('dashboard'), navigate: true);
-    }
+        // Save or update document data
+        $existing = DocumentUpload::where('user_id', $profile->id)->first();
 
+        $data = [
+            'speed' => $this->speed,
+            'strength' => $this->strength,
+            'agility' => $this->agility,
+            'endurance' => $this->endurance,
+            'flexibility' => $this->flexibility,
+        ];
+
+        if ($this->document_path) {
+            $data['document_path'] = $this->document_path->store('documents', 'public');
+
+            if ($existing && $existing->document_path) {
+                Storage::disk('public')->delete($existing->document_path);
+            }
+        }
+
+        if ($existing) {
+            $existing->update($data);
+        } else {
+            $data['user_id'] = $profile->id;
+            DocumentUpload::create($data);
+        }
+
+        session()->flash('success', 'Profile and documents updated successfully!');
+        $this->redirect(route('profile'), navigate: true);
+    }
 
     public function updateClub()
     {
