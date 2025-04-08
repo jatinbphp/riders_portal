@@ -75,7 +75,7 @@ public function getDocumentsData()
     $dataTable = DataTables::of($query)
         ->addColumn('document_path', function ($row) {
             if (!empty($row->document_path)) {
-                $url = asset('storage/' . $row->document_path);
+                $url = asset($row->document_path);
                 return '<a href="' . $url . '" target="_blank" class="btn btn-sm btn-primary">
                             <i class="fa fa-download"></i>
                         </a>';

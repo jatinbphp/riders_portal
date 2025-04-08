@@ -10,10 +10,10 @@
     @endif
     @if($type == 'image')
         @if ($uploads->type == $typeImage)
-            <img src="{{ asset('storage/' . $uploads->path) }}" alt="Uploaded Image" width="50" height="50">
+            <img src="{{ asset($uploads->path) }}" alt="Uploaded Image" width="50" height="50">
         @else
             <video width="100" height="100" controls>
-                <source src="{{ asset('storage/' . $uploads->path) }}" type="video/mp4">
+                <source src="{{ asset($uploads->path) }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         @endif
