@@ -31,8 +31,13 @@
                             <thead>
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="37%">Title</th>
-                                    <th width="40%">Image / video</th>
+                                    @if(auth()->user()->role === 'super_admin')
+                                    <th width="10%">User ID</th>
+                                    <th width="10%">First Name</th>
+                                    <th width="10%">Last Name</th>
+                                    @endif
+                                    <th width="25%">Title</th>
+                                    <th width="25%">Image / video</th>
                                     @if(auth()->user()->role === 'athlete')
                                     <th width="8%">Action</th>
                                     @endif

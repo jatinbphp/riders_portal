@@ -26,4 +26,10 @@ class Uploads extends Model
         self::TYPE_IMAGE => self::TYPE_IMAGE_TEXT,
         self::TYPE_VIDEO => self::TYPE_VIDEO_TEXT,
     ];
+ 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

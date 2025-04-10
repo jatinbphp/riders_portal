@@ -169,4 +169,13 @@ class Profile extends Component
         session()->flash('success', 'Profile and documents updated successfully!');
         $this->redirect(route('dashboard'), navigate: true);
     }
+
+    public function updateClub()
+    {
+        $user = Auth::user();
+        $user->club_id = $this->club_id;
+        $user->save();
+
+        session()->flash('message', 'Club updated successfully.');
+    }
 }

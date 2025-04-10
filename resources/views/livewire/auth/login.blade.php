@@ -1,21 +1,56 @@
-<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow">
-    <h2 class="text-xl font-bold mb-4">Athlete Login</h2>
-    
-    @if (session()->has('error'))
-        <div class="text-red-500 mb-3">{{ session('error') }}</div>
-    @endif
+<form wire:submit.prevent="login" class="space-y-5 max-w-md mx-auto p-6 rounded ">
 
-    <form wire:submit.prevent="login">
-        <div class="mb-3">
-            <label class="block text-sm">Email</label>
-            <input type="email" wire:model="email" class="w-full p-2 border rounded">
+    {{-- Email --}}
+    <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+        <input
+            wire:model="email"
+            id="email"
+            type="email"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring focus:border-blue-400"
+            placeholder="you@example.com"
+        />
+        @error('email') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+    </div>
+
+    {{-- Password + Forgot Link --}}
+    <div>
+        <div class="flex items-center justify-between mt-1">
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <a href="{{ route('password.request') }}" class="text-sm text-blue-500 hover:underline">
+                Forgot password?
+            </a>
         </div>
+        <input
+            wire:model="password"
+            id="password"
+            type="password"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring focus:border-blue-400"
+            placeholder="••••••••"
+        />
+        @error('password') <span class="text-sm text-red-500">{{ $message }}</span> @enderror
+    </div>
 
-        <div class="mb-3">
-            <label class="block text-sm">Password</label>
-            <input type="password" wire:model="password" class="w-full p-2 border rounded">
-        </div>
+    {{-- Remember Me --}}
+    <div class="flex items-center mt-1">
+        <input type="checkbox" id="remember" wire:model="remember" class="mr-2 rounded border-gray-300 text-blue-600">
+        <label for="remember" class="text-sm text-gray-700 ml-1"> Remember me</label>
+    </div>
 
-        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Login</button>
-    </form>
-</div>
+    {{-- Submit Button --}}
+    <div>
+        <button
+            type="submit"
+            class="w-full border border-gray-300 py-2 rounded text-black mt-1"
+        >
+            Login
+        </button>
+    </div>
+
+    {{-- Register Link --}}
+    <div class="text-center text-sm text-gray-600 mt-2">
+        Don't have an account?
+        <a href="{{ route('register') }}" class="text-blue-600 underline hover:text-blue-800">Register here</a>
+    </div>
+
+</form>

@@ -54,4 +54,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function documentUploads()
+    {
+        return $this->hasOne(DocumentUpload::class, 'user_id', 'id');
+    }
 }

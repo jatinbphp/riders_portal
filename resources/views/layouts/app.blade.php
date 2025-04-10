@@ -84,15 +84,30 @@
                 if (data.error) {
                     alert(data.error);
                     return;
-                }
+                } 
 
                 document.getElementById("firstname").innerText = data.firstname;
                 document.getElementById("lastname").innerText = data.lastname;
                 document.getElementById("email").innerText = data.email;
+                document.getElementById("nationality").innerText = data.nationality;
+                document.getElementById("dob").innerText = data.dob;
+                document.getElementById("biography").innerText = data.biography;
                 document.getElementById("height").innerText = data.height;
                 document.getElementById("weight").innerText = data.weight;
                 document.getElementById("sport_type").innerText = data.sport_type;
                 document.getElementById("specialization").innerText = data.specialization;
+                document.getElementById("speed").innerText = data.speed;
+                document.getElementById("strength").innerText = data.strength;
+                document.getElementById("agility").innerText = data.agility;
+                document.getElementById("endurance").innerText = data.endurance;
+                document.getElementById("flexibility").innerText = data.flexibility;
+                if (data.document_path) {
+                    const link = `<a class="btn btn-sm btn-primary" href="${data.document_path}" target="_blank"><i class="fa fa-download"></i></a>`;
+                    document.getElementById("document_path").innerHTML = link;
+                } else {
+                    document.getElementById("document_path").innerText = 'No document available';
+                }
+
 
                 // Open Bootstrap Modal
                 var myModal = new bootstrap.Modal(document.getElementById('athleteModal'));

@@ -89,7 +89,7 @@ $(document).ready(function () {
             render: function(data) {
                 return '#' + data;
             }
-        },
+        }, 
         { data: 'speed', name: 'speed' },
         { data: 'strength', name: 'strength' },
         { data: 'agility', name: 'agility' },
@@ -97,6 +97,14 @@ $(document).ready(function () {
         { data: 'flexibility', name: 'flexibility' },
         { data: 'document_path', name: 'document_path', orderable: false, searchable: false },
     ];
+
+    if (isSuperAdmin) {
+        columns.splice(1, 0, 
+            { data: 'user_id', name: 'user_id' },
+            { data: 'firstname', name: 'firstname', title: 'First Name' },
+            { data: 'lastname', name: 'lastname', title: 'Last Name' }
+        );
+    }
 
     if (!isSuperAdmin) {
         columns.push({ data: 'actions', name: 'actions', orderable: false, searchable: false });
@@ -121,10 +129,18 @@ $(document).ready(function () {
             render: function (data) {
                 return '#' + data;
             }
-        },
+        }, 
         { data: 'title', name: 'title' },
         { data: 'image', name: 'image', orderable: false, searchable: false }
     ];
+
+    if (isSuperAdmin) {
+        columns.splice(1, 0, 
+            { data: 'user_id', name: 'user_id' },
+            { data: 'firstname', name: 'firstname', title: 'First Name' },
+            { data: 'lastname', name: 'lastname', title: 'Last Name' }
+        );
+    }
 
     // Add "actions" column only if NOT super admin
     if (!isSuperAdmin) {

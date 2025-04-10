@@ -111,7 +111,6 @@
                                                 <option value="{{ $club->id }}">{{ $club->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('club_id') <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                 </div>
 

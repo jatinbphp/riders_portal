@@ -13,7 +13,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                @if(auth()->user()->role === 'super_admin')
+                @if(auth()->check() && auth()->user()->role === 'super_admin')
                     <li class="nav-item"><a href="{{ route('athlete') }}" class="nav-link {{ request()->is('athlete') ? 'active' : '' }}" wire:navigate>
                     <i class="nav-icon fas fa-biking"></i>
                         <p>Manage Athletes</p>
@@ -32,8 +32,8 @@
                         <p>Clubs</p>
                     </a>
                 </li>
-                @endif
-                @if(auth()->user()->role === 'athlete')
+                @endif 
+                @if(auth()->check() && auth()->user()->role === 'athlete')
                 <li class="nav-item">
                     <a href="{{ route('social-links') }}" class="nav-link {{ request()->is('social-links') ? 'active' : '' }}" wire:navigate>
                         <i class="nav-icon fa fa-clipboard"></i>

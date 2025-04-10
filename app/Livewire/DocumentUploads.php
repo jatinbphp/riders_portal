@@ -61,7 +61,7 @@ class DocumentUploads extends Component
 
         session()->flash('success', 'Profile stats saved successfully!');
 
-        return redirect()->route('document-uploads'); // 👈
+        return redirect()->route('document-uploads'); 
     }  
  
 
@@ -70,10 +70,26 @@ public function getDocumentsData()
     $user = Auth::user();
     $isSuperAdmin = $user->role === 'super_admin';
 
-    $query = DocumentUpload::select();
+    $query = DocumentUpload::with('user'); 
+    if (!$isSuperAdmin) {
+        $query->where('user_id', $user->id);
+    }
 
-    $dataTable = DataTables::of($query)
-        ->addColumn('document_path', function ($row) {
+    $dataTable = DataTables::of($query);
+ 
+    if ($isSuperAdmin) {
+        $dataTable
+            ->addColumn('user_id', function ($row) {
+                return $row->user->id ?? '-';
+            })
+            ->addColumn('firstname', function ($row) {
+                return $row->user->firstname ?? '-'; 
+            })
+            ->addColumn('lastname', function ($row) {
+                return $row->user->lastname ?? '-'; 
+            });
+    }
+        $dataTable->addColumn('document_path', function ($row) {
             if (!empty($row->document_path)) {
                 $url = asset($row->document_path);
                 return '<a href="' . $url . '" target="_blank" class="btn btn-sm btn-primary">
@@ -82,8 +98,7 @@ public function getDocumentsData()
             }
             return 'No File';
         });
-
-    // Only add the 'actions' column if NOT super_admin
+ 
     if (!$isSuperAdmin) {
         $dataTable->addColumn('actions', function ($row) {
             return view('livewire.document-uploads.actions', [
@@ -94,7 +109,7 @@ public function getDocumentsData()
     }
 
     return $dataTable
-        ->rawColumns(['document_path', 'actions']) // Safe to include 'actions' even if not added
+        ->rawColumns(['document_path', 'actions'])  
         ->make(true);
 }
 

@@ -18,4 +18,9 @@ class DocumentUpload extends Model
         'flexibility',
         'document_path',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

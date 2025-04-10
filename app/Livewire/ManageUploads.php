@@ -26,35 +26,61 @@ class ManageUploads extends Component
     }
 
     public function getUploadsData()
-{
-    $user = Auth::user();
-    $isSuperAdmin = $user->role === 'super_admin';
+    {
+        $user = Auth::user();
+        $isSuperAdmin = $user->role === 'super_admin';
 
-    $query = Uploads::select();
+        $query = Uploads::with('user');
+        if (!$isSuperAdmin) {
+            $query->where('user_id', $user->id);
+        }
 
-    $dataTable = DataTables::of($query)
-        ->addColumn('image', function ($row) {
-            return view('livewire.manage-uploads.actions', [
-                'uploads' => $row,
-                'type' => 'image',
-                'typeImage' => Uploads::TYPE_IMAGE,
-            ]);
-        });
+        $dataTable = DataTables::of($query);
 
-    // Only add the 'actions' column if NOT super_admin
-    if (!$isSuperAdmin) {
-        $dataTable->addColumn('actions', function ($row) {
-            return view('livewire.manage-uploads.actions', [
-                'uploads' => $row,
-                'type' => 'action',
-            ]);
-        });
+         if ($isSuperAdmin) {
+            $dataTable
+                ->addColumn('user_id', function ($row) {
+                    return $row->user->id ?? '-';
+                })
+                ->addColumn('firstname', function ($row) {
+                    return $row->user->firstname ?? '-'; 
+                })
+                ->addColumn('lastname', function ($row) {
+                    return $row->user->lastname ?? '-'; 
+                });
+        }
+
+            $dataTable->addColumn('user_id', function ($row) {
+                return $row->user->id ?? '-';
+            })
+            ->addColumn('firstname', function ($row) {
+                return $row->user->firstname ?? '-'; 
+            })
+            ->addColumn('lastname', function ($row) {
+                return $row->user->lastname ?? '-'; 
+            })
+            ->addColumn('image', function ($row) {
+                return view('livewire.manage-uploads.actions', [
+                    'uploads' => $row,
+                    'type' => 'image',
+                    'typeImage' => Uploads::TYPE_IMAGE,
+                ]);
+            });
+
+        // Only add the 'actions' column if NOT super_admin
+        if (!$isSuperAdmin) {
+            $dataTable->addColumn('actions', function ($row) {
+                return view('livewire.manage-uploads.actions', [
+                    'uploads' => $row,
+                    'type' => 'action',
+                ]);
+            });
+        }
+
+        return $dataTable
+            ->rawColumns(['image', 'actions']) 
+            ->make(true);
     }
-
-    return $dataTable
-        ->rawColumns(['image', 'actions']) // keep 'actions' here; safe even if not added
-        ->make(true);
-}
 
     public function deleteUploads($uploadId)
     {

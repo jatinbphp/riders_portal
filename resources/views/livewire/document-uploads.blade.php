@@ -30,6 +30,11 @@
                             <thead>
                                 <tr>
                                     <th width="5%">#</th>
+                                    @if(auth()->user()->role === 'super_admin')
+                                    <th width="5%">User ID</th>
+                                    <th width="5%">First Name</th>
+                                    <th width="5%">Last Name</th>
+                                    @endif
                                     <th width="5%">Speed</th>
                                     <th width="5%">Strength</th>
                                     <th width="5%">Agility</th>
